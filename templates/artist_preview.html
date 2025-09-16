@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ entity.name or 'Unknown Artist' }}</title>
+    <link rel="stylesheet" href="/static/css/preview.css">
+    <style>
+        .container { 
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); 
+            color: #333; 
+            margin: 0; 
+            min-height: 100vh;
+        }
+        .content-box { 
+            background: white; 
+            border-radius: 10px; 
+            padding: 25px; 
+            margin: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
+        }
+        h1 { 
+            color: #2c3e50; 
+            border-bottom: 3px solid #e74c3c; 
+            padding-bottom: 15px; 
+            margin-bottom: 20px; 
+            font-size: 24px; 
+        }
+        .bio { 
+            background: #f8f9fa; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin-top: 20px; 
+            border-left: 4px solid #e74c3c; 
+        }
+        .external-links { 
+            margin-top: 20px; 
+        }
+        .link { 
+            display: inline-block; 
+            background: #3498db; 
+            color: white; 
+            padding: 8px 16px; 
+            text-decoration: none; 
+            border-radius: 5px; 
+            margin-right: 10px; 
+            font-size: 12px; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content-box">
+            <h1>{{ entity.name or 'Unknown Artist' }}</h1>
+            
+            {% set years = '' %}
+            {% if entity.birth_year and entity.death_year %}
+                {% set years = entity.birth_year ~ '–' ~ entity.death_year %}
+            {% elif entity.birth_year %}
+                {% set years = 'b. ' ~ entity.birth_year %}
+            {% endif %}
+            
+            {% if years %}
+                <div class="info">
+                    <span class="label">Years:</span>
+                    <span class="value">{{ years }}</span>
+                </div>
+            {% endif %}
+            
+            {% if entity.nationality %}
+                <div class="info">
+                    <span class="label">Nationality:</span>
+                    <span class="value">{{ entity.nationality }}</span>
+                </div>
+            {% endif %}
+            
+            {% if entity.gender %}
+                <div class="info">
+                    <span class="label">Gender:</span>
+                    <span class="value">{{ entity.gender.title() }}</span>
+                </div>
+            {% endif %}
+            
+            {% if entity.artist_bio %}
+                <div class="bio">
+                    <strong>Biography:</strong><br>
+                    {{ entity.artist_bio }}
+                </div>
+            {% endif %}
+            
+            <div class="external-links">
+                {% if entity.wiki_qid %}
+                    <a href="https://www.wikidata.org/wiki/{{ entity.wiki_qid }}" target="_blank" class="link">Wikidata</a>
+                {% endif %}
+                {% if entity.ulan %}
+                    <a href="http://vocab.getty.edu/ulan/{{ entity.ulan }}" target="_blank" class="link">Getty ULAN</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

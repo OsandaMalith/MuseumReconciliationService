@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ entity.museum_name or entity.legal_name or 'Museum' }}</title>
+    <link rel="stylesheet" href="/static/css/preview.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .container { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            color: #333; 
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 30px;
+        }
+        .content-box { 
+            background: white; 
+            border-radius: 12px; 
+            padding: 30px; 
+            width: 100%;
+            max-width: 700px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
+        }
+        h1 { 
+            color: #2c3e50; 
+            border-bottom: 3px solid #3498db; 
+            padding-bottom: 10px; 
+            margin-bottom: 20px; 
+            font-size: 26px; 
+        }
+        .info { 
+            margin: 10px 0; 
+        }
+        .label { 
+            font-weight: bold; 
+            color: #555; 
+            margin-right: 8px; 
+        }
+        .value { 
+            color: #222; 
+        }
+        .coordinates { 
+            font-family: monospace; 
+            background: #f8f9fa; 
+            padding: 5px 8px; 
+            border-radius: 4px; 
+            font-size: 13px; 
+        }
+        .contact { 
+            background: #ecf0f1; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin-top: 25px; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content-box">
+            <!-- Title -->
+            <h1>{{ entity.museum_name or entity.legal_name or 'Museum' }}</h1>
+            
+            <!-- Legal Name -->
+            {% if entity.legal_name and entity.legal_name != entity.museum_name %}
+                <div class="info">
+                    <span class="label">Legal Name:</span>
+                    <span class="value">{{ entity.legal_name }}</span>
+                </div>
+            {% endif %}
+            
+            <!-- Alternate Name -->
+            {% if entity.alternate_name %}
+                <div class="info">
+                    <span class="label">Also Known As:</span>
+                    <span class="value">{{ entity.alternate_name }}</span>
+                </div>
+            {% endif %}
+            
+            <!-- Museum Type -->
+            <div class="info">
+                <span class="label">Type:</span>
+                <span class="value">{{ entity.museum_type or 'Museum' }}</span>
+            </div>
+            
+            <!-- Location -->
+            {% set location_parts = [] %}
+            {% if entity.city_admin %}{% set _ = location_parts.append(entity.city_admin) %}{% endif %}
+            {% if entity.state_admin %}{% set _ = location_parts.append(entity.state_admin) %}{% endif %}
+            {% set location = location_parts | join(', ') if location_parts else 'Location not specified' %}
+            <div class="info">
+                <span class="label">Location:</span>
+                <span class="value">{{ location }}</span>
+            </div>
+            
+            <!-- Address -->
+            {% if entity.street_address_admin %}
+                <div class="info">
+                    <span class="label">Address:</span>
+                    <span class="value">{{ entity.street_address_admin }}</span>
+                </div>
+            {% endif %}
+            
+            <!-- ZIP Code -->
+            {% if entity.zip_admin %}
+                <div class="info">
+                    <span class="label">ZIP Code:</span>
+                    <span class="value">{{ entity.zip_admin }}</span>
+                </div>
+            {% endif %}
+            
+            <!-- Contact Section -->
+            <div class="contact">
+                {% if entity.phone %}
+                    <div class="info">
+                        <span class="label">Phone:</span>
+                        <span class="value">{{ entity.phone }}</span>
+                    </div>
+                {% endif %}
+                
+                {% if entity.latitude and entity.longitude %}
+                    <div class="info">
+                        <span class="label">Coordinates:</span>
+                        <span class="value">
+                            <span class="coordinates">{{ entity.latitude }}, {{ entity.longitude }}</span>
+                        </span>
+                    </div>
+                {% endif %}
+                
+                {% if entity.revenue and entity.revenue > 0 %}
+                    <div class="info">
+                        <span class="label">Revenue:</span>
+                        <span class="value">${{ "{:,}".format(entity.revenue) }}</span>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ entity.title or 'Untitled' }}</title>
+    <link rel="stylesheet" href="/static/css/preview.css">
+    <style>
+        .container { 
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); 
+            color: #333; 
+            margin: 0; 
+            min-height: 100vh;
+        }
+        .content-box { 
+            background: white; 
+            border-radius: 10px; 
+            padding: 25px; 
+            margin: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
+        }
+        h1 { 
+            color: #2c3e50; 
+            border-bottom: 3px solid #16a085; 
+            padding-bottom: 15px; 
+            margin-bottom: 20px; 
+            font-size: 24px; 
+        }
+        .image { 
+            text-align: center; 
+            margin: 20px 0; 
+        }
+        .image img { 
+            max-width: 100%; 
+            height: auto; 
+            border-radius: 8px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
+        }
+        .technical { 
+            background: #f8f9fa; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin-top: 20px; 
+            border-left: 4px solid #16a085; 
+        }
+        .external-links { 
+            margin-top: 20px; 
+        }
+        .link { 
+            display: inline-block; 
+            background: #16a085; 
+            color: white; 
+            padding: 8px 16px; 
+            text-decoration: none; 
+            border-radius: 5px; 
+            margin-right: 10px; 
+            font-size: 12px; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content-box">
+            <h1>{{ entity.title or 'Untitled' }}</h1>
+            
+            {% if entity.image_url %}
+                <div class="image">
+                    <img src="{{ entity.image_url }}" alt="{{ entity.title }}" />
+                </div>
+            {% endif %}
+            
+            {% if entity.artist %}
+                <div class="info">
+                    <span class="label">Artist:</span>
+                    <span class="value">{{ entity.artist }}</span>
+                </div>
+            {% endif %}
+            
+            {% if entity.date %}
+                <div class="info">
+                    <span class="label">Date:</span>
+                    <span class="value">{{ entity.date }}</span>
+                </div>
+            {% endif %}
+            
+            {% if entity.nationality %}
+                <div class="info">
+                    <span class="label">Nationality:</span>
+                    <span class="value">{{ entity.nationality }}</span>
+                </div>
+            {% endif %}
+            
+            {% if entity.medium %}
+                <div class="info">
+                    <span class="label">Medium:</span>
+                    <span class="value">{{ entity.medium }}</span>
+                </div>
+            {% endif %}
+            
+            {% set dimensions_parts = [] %}
+            {% if entity.height_cm %}{% set _ = dimensions_parts.append('H: ' ~ entity.height_cm ~ ' cm') %}{% endif %}
+            {% if entity.width_cm %}{% set _ = dimensions_parts.append('W: ' ~ entity.width_cm ~ ' cm') %}{% endif %}
+            {% if entity.length_cm %}{% set _ = dimensions_parts.append('L: ' ~ entity.length_cm ~ ' cm') %}{% endif %}
+            {% set dimensions_display = dimensions_parts | join(', ') if dimensions_parts else entity.dimensions %}
+            
+            {% if dimensions_display %}
+                <div class="info">
+                    <span class="label">Dimensions:</span>
+                    <span class="value">{{ dimensions_display }}</span>
+                </div>
+            {% endif %}
+            
+            {% if entity.classification %}
+                <div class="info">
+                    <span class="label">Classification:</span>
+                    <span class="value">{{ entity.classification }}</span>
+                </div>
+            {% endif %}
+            
+            {% if entity.department %}
+                <div class="info">
+                    <span class="label">Department:</span>
+                    <span class="value">{{ entity.department }}</span>
+                </div>
+            {% endif %}
+            
+            <div class="technical">
+                {% if entity.accession_number %}
+                    <div class="info">
+                        <span class="label">Accession No:</span>
+                        <span class="value">{{ entity.accession_number }}</span>
+                    </div>
+                {% endif %}
+                
+                {% if entity.object_id %}
+                    <div class="info">
+                        <span class="label">Object ID:</span>
+                        <span class="value">{{ entity.object_id }}</span>
+                    </div>
+                {% endif %}
+                
+                {% if entity.date_acquired %}
+                    <div class="info">
+                        <span class="label">Date Acquired:</span>
+                        <span class="value">{{ entity.date_acquired }}</span>
+                    </div>
+                {% endif %}
+                
+                {% if entity.credit_line %}
+                    <div class="info">
+                        <span class="label">Credit Line:</span>
+                        <span class="value">{{ entity.credit_line }}</span>
+                    </div>
+                {% endif %}
+                
+                {% if entity.on_view %}
+                    <div class="info">
+                        <span class="label">On View:</span>
+                        <span class="value">{{ 'Yes' if entity.on_view else 'No' }}</span>
+                    </div>
+                {% endif %}
+                
+                {% if entity.weight_kg %}
+                    <div class="info">
+                        <span class="label">Weight:</span>
+                        <span class="value">{{ entity.weight_kg }} kg</span>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="external-links">
+                {% if entity.url %}
+                    <a href="{{ entity.url }}" target="_blank" class="link">View Full Record</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
